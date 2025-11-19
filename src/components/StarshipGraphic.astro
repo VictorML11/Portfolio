@@ -1,4 +1,8 @@
-<div class="opacity-60 mix-blend-screen w-full h-full">
+---
+// src/components/StarshipGraphic.astro
+---
+
+<div class="w-full h-full">
     <svg
         viewBox="0 0 100 100"
         fill="none"
@@ -19,7 +23,7 @@
             </linearGradient>
 
             <filter
-                id="engine-glow"
+                id="glow-engine"
                 x="-50%"
                 y="-50%"
                 width="200%"
@@ -34,111 +38,118 @@
             </filter>
         </defs>
 
-        <g class="ship-body">
+        <g class="exhaust opacity-80">
+            <line
+                x1="22"
+                y1="50"
+                x2="22"
+                y2="10"
+                class="trail-fast"
+                style="--x: 22px; --y: 50px; --delay:0s"></line>
+            <line
+                x1="22"
+                y1="50"
+                x2="18"
+                y2="20"
+                class="trail-side"
+                style="--x: 22px; --y: 50px; --delay:0.1s"></line>
+
+            <line
+                x1="78"
+                y1="50"
+                x2="78"
+                y2="10"
+                class="trail-fast"
+                style="--x: 78px; --y: 50px; --delay:0.2s"></line>
+            <line
+                x1="78"
+                y1="50"
+                x2="82"
+                y2="20"
+                class="trail-side"
+                style="--x: 78px; --y: 50px; --delay:0.3s"></line>
+
+            <circle
+                cx="22"
+                cy="30"
+                r="1.5"
+                class="particle"
+                style="--x: 22px; --y: 50px; --delay:0s"></circle>
+            <circle
+                cx="78"
+                cy="30"
+                r="1.5"
+                class="particle"
+                style="--x: 78px; --y: 50px; --delay:0.4s"></circle>
+        </g>
+
+        <g class="ship" style="filter: url(#glow-engine);">
             <path
-                d="M 25 25 L 50 80"
+                d="M 22 50 L 50 75"
                 stroke="url(#ship-grad)"
                 stroke-width="2"
-                stroke-linecap="round"
-                filter="url(#engine-glow)"></path>
-
+                stroke-linecap="round"></path>
             <path
-                d="M 75 25 L 50 80"
+                d="M 78 50 L 50 75"
                 stroke="url(#ship-grad)"
                 stroke-width="2"
-                stroke-linecap="round"
-                filter="url(#engine-glow)"></path>
-
+                stroke-linecap="round"></path>
             <path
-                d="M 35 48 L 50 35 L 65 48"
+                d="M 32 44 L 50 29 L 68 44"
                 stroke="#22d3ee"
                 stroke-width="2"
                 stroke-linecap="round"
                 stroke-linejoin="round"></path>
-
-            <circle cx="50" cy="80" r="2" fill="white" class="animate-pulse"
-            ></circle>
-        </g>
-
-        <g class="exhaust">
-            <line
-                x1="50"
-                y1="85"
-                x2="50"
-                y2="95"
-                class="particle-trail"
-                style="--delay: 0s; --x-offset: 0px;"></line>
-
-            <line
-                x1="50"
-                y1="85"
-                x2="45"
-                y2="92"
-                class="particle-trail"
-                style="--delay: 0.2s; --x-offset: -3px;"></line>
-
-            <line
-                x1="50"
-                y1="85"
-                x2="55"
-                y2="92"
-                class="particle-trail"
-                style="--delay: 0.4s; --x-offset: 3px;"></line>
-
-            <circle
-                cx="50"
-                cy="85"
-                r="1"
-                class="particle-dot"
-                style="--delay: 0.1s;"></circle>
-            <circle
-                cx="50"
-                cy="85"
-                r="0.5"
-                class="particle-dot"
-                style="--delay: 0.5s;"></circle>
         </g>
     </svg>
 </div>
 
 <style>
-    /* Physics for the Engine Trail */
-    @keyframes trail-fire {
+    /* Physics: Particles move UP (negative Y) away from the ship moving DOWN */
+    @keyframes blast {
         0% {
             transform: translate(0, 0);
             opacity: 1;
             stroke-width: 2;
         }
         100% {
-            /* Move down (away from engine) and spread out slightly */
-            transform: translate(var(--x-offset), 20px);
+            transform: translate(0, -40px);
             opacity: 0;
             stroke-width: 0;
         }
     }
 
-    @keyframes particle-fly {
+    @keyframes drift {
         0% {
-            transform: translate(0, 0);
+            transform: translate(0, 0) scale(1);
             opacity: 1;
         }
         100% {
-            transform: translate(0, 30px);
+            transform: translate(var(--rn-x, 0px), -60px) scale(0);
             opacity: 0;
         }
     }
 
-    .particle-trail {
+    .trail-fast {
         stroke: #22d3ee;
-        stroke-linecap: round;
-        animation: trail-fire 0.6s linear infinite;
-        animation-delay: var(--delay);
-        transform-origin: 50px 80px;
+        stroke-dasharray: 5 5;
+        animation: blast 0.4s linear infinite;
+        transform-origin: var(--x) var(--y);
     }
 
-    .particle-dot {
-        fill: #c084fc;
-        animation: particle-fly 0.8s linear infinite;
+    .trail-side {
+        stroke: #c084fc;
+        opacity: 0.6;
+        animation: blast 0.6s linear infinite;
         animation-delay: var(--delay);
+        transform-origin: var(--x) var(--y);
+    }
+
+    .particle {
+        fill: white;
+        animation: drift 1s ease-out infinite;
+        animation-delay: var(--delay);
+        transform-box: fill-box;
+        transform-origin: center;
     }
 </style>
