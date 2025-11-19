@@ -1,0 +1,104 @@
+---
+// src/components/StarshipSystem.astro
+import StarshipGraphic from "./StarshipGraphic.astro";
+---
+
+<div
+    id="starship-container"
+    class="fixed inset-0 pointer-events-none -z-5 overflow-hidden"
+>
+    <div
+        id="starship"
+        class="absolute w-24 h-24 opacity-0 will-change-transform"
+    >
+        <StarshipGraphic />
+    </div>
+</div>
+
+<script>
+    const ship = document.getElementById("starship");
+
+    function launchShip() {
+        if (!ship) return;
+
+        // 1. Viewport Dimensions
+        const w = window.innerWidth;
+        const h = window.innerHeight;
+        const buffer = 150; // Start/End well outside screen
+
+        // 2. Randomize Edge (0=Top, 1=Right, 2=Bottom, 3=Left)
+        // We bias towards Top/Left start to mimic reading direction, but allow all.
+        const startSide = Math.floor(Math.random() * 4);
+
+        let startX, startY, endX, endY;
+
+        // Logic to pick random start point and "opposite" end point
+        switch (startSide) {
+            case 0: // Top -> Bottom
+                startX = Math.random() * w;
+                startY = -buffer;
+                endX = Math.random() * w;
+                endY = h + buffer;
+                break;
+            case 1: // Right -> Left
+                startX = w + buffer;
+                startY = Math.random() * h;
+                endX = -buffer;
+                endY = Math.random() * h;
+                break;
+            case 2: // Bottom -> Top
+                startX = Math.random() * w;
+                startY = h + buffer;
+                endX = Math.random() * w;
+                endY = -buffer;
+                break;
+            case 3: // Left -> Right
+                startX = -buffer;
+                startY = Math.random() * h;
+                endX = w + buffer;
+                endY = Math.random() * h;
+                break;
+        }
+
+        // 3. Calculate Angle (Orientation)
+        const dx = endX - startX;
+        const dy = endY - startY;
+
+        // Math.atan2 gives angle in radians relative to X-axis (Right is 0)
+        // Our ship points DOWN (90deg).
+        // So we subtract 90deg (PI/2) to align the ship's nose to the vector.
+        const angleRad = Math.atan2(dy, dx);
+        const angleDeg = (angleRad * 180) / Math.PI - 90;
+
+        // 4. Randomize Speed (Slow = Majestic, Fast = Fighter)
+        const duration = Math.random() * 20 + 20; // 20s to 40s duration
+
+        // 5. Apply Animation
+        const keyframes = [
+            {
+                transform: `translate(${startX}px, ${startY}px) rotate(${angleDeg}deg) scale(0.8)`,
+                opacity: 0,
+            },
+            { opacity: 0.6, offset: 0.1 }, // Fade in
+            { opacity: 0.6, offset: 0.9 }, // Stay visible
+            {
+                transform: `translate(${endX}px, ${endY}px) rotate(${angleDeg}deg) scale(0.8)`,
+                opacity: 0,
+            },
+        ];
+
+        const animation = ship.animate(keyframes, {
+            duration: duration * 1000,
+            easing: "linear",
+            iterations: 1,
+        });
+
+        // 6. Loop when finished
+        animation.onfinish = () => {
+            launchShip(); // Re-launch with new random coordinates
+        };
+    }
+
+    // Start the loop on load
+    window.requestAnimationFrame(launchShip);
+</script>

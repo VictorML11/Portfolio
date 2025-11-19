@@ -1,15 +1,16 @@
 ---
 import Layout from "../layouts/Layout.astro";
-import Section from "../components/Section.astro";
+import Section from "../components/Section.astro"; // Keep for layout, but we'll use the new Header inside
+import SectionHeader from "../components/SectionHeader.astro"; // NEW
 import Badge from "../components/Badge.astro";
-import Header from "../components/Header.astro"; // New Header
-import SpaceFigures from "../components/SpaceFigures.astro"; // Import the new figures
+import Header from "../components/Header.astro";
+import SpaceFigures from "../components/SpaceFigures.astro";
 import DrawingGraphic from "../components/DrawingGraphic.astro";
 import { Image } from "astro:assets";
 import profileImg from "../assets/victor.jpg";
-import PlanetGraphic from "../components/PlanetGraphic.astro";
 import SatelliteGraphic from "../components/SatelliteGraphic.astro";
 import AstronautGraphic from "../components/AstronautGraphic.astro";
+import StarshipSystem from "../components/StarshipSystem.astro";
 
 const skills = [
 	"Java 21",
@@ -46,10 +47,8 @@ const experience = [
 		class="fixed top-0 left-1/2 -translate-x-1/2 w-[800px] h-[600px] bg-purple-900/20 rounded-full blur-[120px] -z-10 pointer-events-none"
 	>
 	</div>
-	<div
-		class="climbing-rope fixed h-full w-[1px] bg-gradient-to-b from-transparent via-cyan-500/20 to-transparent left-6 md:left-1/2 -z-10"
-	>
-	</div>
+
+	<StarshipSystem />
 
 	<SpaceFigures />
 
@@ -59,7 +58,6 @@ const experience = [
 	>
 		<SatelliteGraphic />
 	</div>
-
 	<div
 		class="absolute top-1/2 left-4 w-20 h-20 animate-float"
 		style="animation-delay: 4s"
@@ -88,7 +86,6 @@ const experience = [
 						class="absolute inset-0 rounded-full bg-black m-[2px] z-0"
 					>
 					</div>
-
 					<div
 						class="relative w-full h-full rounded-full overflow-hidden border-2 border-white/10 z-10"
 					>
@@ -160,7 +157,8 @@ const experience = [
 			</div>
 		</section>
 
-		<Section id="about" title="01. The Explorer">
+		<Section id="about">
+			<SectionHeader title="The Explorer" />
 			<div class="grid md:grid-cols-2 gap-12 items-center">
 				<div
 					class="space-y-6 text-gray-300 font-light leading-relaxed animate-slide-in-bottom"
@@ -197,30 +195,45 @@ const experience = [
 			</div>
 		</Section>
 
-		<Section id="experience" title="02. The Ascent">
-			<div class="relative space-y-16">
+		<Section id="experience">
+			<SectionHeader title="The Ascent" />
+
+			<div class="relative space-y-0">
+				<div
+					class="absolute top-0 bottom-0 left-[19px] md:left-1/2 md:-ml-[0.5px] w-px bg-gradient-to-b from-transparent via-white/20 to-transparent dashed-line"
+				>
+				</div>
+
 				{
 					experience.map((job, index) => (
 						<div
-							class="relative pl-8 md:pl-0 md:grid md:grid-cols-5 gap-8 group animate-fade-in-up"
+							class="relative pl-12 md:pl-0 md:grid md:grid-cols-2 md:gap-12 items-start group animate-fade-in-up"
 							style={`animation-delay: ${index * 200}ms`}
 						>
-							<div class="absolute left-0 md:left-1/2 w-4 h-4 bg-slate-900 border-2 border-cyan-500 rounded-full transform md:-translate-x-2 mt-1.5 group-hover:scale-125 group-hover:bg-cyan-500 transition-all duration-300 z-20 shadow-[0_0_10px_rgba(34,211,238,0.5)]" />
-
-							<div class="md:col-span-2 md:text-right text-sm font-mono text-cyan-300/80 pt-1 group-hover:text-cyan-300 transition-colors">
+							<div
+								class={`md:text-right text-xs font-mono text-cyan-400/70 py-1 ${index % 2 === 0 ? "md:pr-8" : "md:col-start-2 md:pl-8 md:text-left md:row-start-1"}`}
+							>
 								{job.date}
 							</div>
 
-							<div class="md:col-span-3 p-6 rounded-xl bg-white/5 border border-white/5 group-hover:border-white/10 transition-all group-hover:-translate-y-1">
-								<h3 class="text-white font-bold text-xl">
-									{job.role}
-								</h3>
-								<h4 class="text-purple-300 text-sm mb-4">
-									{job.company}
-								</h4>
-								<p class="text-gray-400 font-light text-sm leading-relaxed">
-									{job.desc}
-								</p>
+							<div class="absolute left-0 md:left-1/2 md:-translate-x-1/2 top-1 w-10 h-10 flex items-center justify-center z-10">
+								<div class="w-3 h-3 bg-[#020617] border border-cyan-500 rotate-45 group-hover:bg-cyan-500 group-hover:scale-125 transition-all duration-300 shadow-[0_0_10px_rgba(34,211,238,0.3)]" />
+							</div>
+
+							<div
+								class={`mt-1 ${index % 2 === 0 ? "md:col-start-2 md:pl-8" : "md:col-start-1 md:text-right md:pr-8 md:row-start-1"}`}
+							>
+								<div class="p-6 rounded-xl bg-white/5 border border-white/5 group-hover:border-cyan-500/20 transition-all group-hover:-translate-y-1 group-hover:shadow-lg hover:bg-white/[0.07]">
+									<h3 class="text-white font-bold text-xl tracking-tight">
+										{job.role}
+									</h3>
+									<h4 class="text-purple-300/80 text-sm mb-3 font-mono">
+										{job.company}
+									</h4>
+									<p class="text-gray-400 font-light text-sm leading-relaxed">
+										{job.desc}
+									</p>
+								</div>
 							</div>
 						</div>
 					))
@@ -240,3 +253,41 @@ const experience = [
 		</footer>
 	</main>
 </Layout>
+
+<style>
+	/* Flight Animation: Bottom-Left to Top-Right */
+	@keyframes fly-across {
+		0% {
+			/* Start off-screen bottom-left */
+			/* Rotation: 135deg aligns the downward nose to point Top-Right */
+			transform: translate(-20vw, 110vh) rotate(135deg) scale(0.8);
+			opacity: 0;
+		}
+		10% {
+			opacity: 0.4;
+		}
+		90% {
+			opacity: 0.4;
+		}
+		100% {
+			/* End off-screen top-right */
+			transform: translate(120vw, -20vh) rotate(135deg) scale(0.8);
+			opacity: 0;
+		}
+	}
+
+	.animate-fly-across {
+		animation: fly-across 45s linear infinite;
+		will-change: transform;
+	}
+
+	.dashed-line {
+		background-image: linear-gradient(
+			to bottom,
+			rgba(255, 255, 255, 0.2) 50%,
+			transparent 50%
+		);
+		background-size: 1px 10px;
+		background-repeat: repeat-y;
+	}
+</style>
