@@ -1,0 +1,155 @@
+<canvas
+    id="space-canvas"
+    class="fixed top-0 left-0 w-full h-full z-1 pointer-events-none"></canvas>
+
+<script>
+    const canvas = document.getElementById("space-canvas") as HTMLCanvasElement;
+    const ctx = canvas.getContext("2d");
+
+    let width = (canvas.width = window.innerWidth);
+    let height = (canvas.height = window.innerHeight);
+
+    const colors = ["#ffffff", "#22d3ee", "#c084fc", "#f472b6"];
+
+    // 1. REGULAR STARS
+    const stars: {
+        x: number;
+        y: number;
+        vx: number;
+        vy: number;
+        size: number;
+        color: string;
+    }[] = [];
+    const numStars = 70;
+
+    // 2. SHOOTING STARS
+    interface ShootingStar {
+        x: number;
+        y: number;
+        vx: number;
+        vy: number;
+        len: number;
+        life: number;
+        color: string;
+    }
+    let shootingStars: ShootingStar[] = [];
+
+    let mouse = { x: -100, y: -100 };
+
+    window.addEventListener("mousemove", (e) => {
+        mouse.x = e.clientX;
+        mouse.y = e.clientY;
+    });
+
+    // Init Regular Stars
+    for (let i = 0; i < numStars; i++) {
+        stars.push({
+            x: Math.random() * width,
+            y: Math.random() * height,
+            vx: (Math.random() - 0.5) * 0.2,
+            vy: (Math.random() - 0.5) * 0.2,
+            size: Math.random() * 2,
+            color: colors[Math.floor(Math.random() * colors.length)],
+        });
+    }
+
+    function spawnShootingStar() {
+        // Spawn mostly from top-left or top-right
+        const startX = Math.random() * width;
+        const startY = Math.random() * (height / 2);
+
+        shootingStars.push({
+            x: startX,
+            y: startY,
+            vx: (Math.random() - 0.5) * 10 + (Math.random() < 0.5 ? -5 : 5), // Fast horizontal
+            vy: Math.random() * 5 + 2, // Fast vertical down
+            len: Math.random() * 80 + 50, // Tail length
+            life: 100, // Frames to live
+            color: "#ffffff", // Usually white/bright
+        });
+    }
+
+    function animate() {
+        if (!ctx) return;
+        ctx.clearRect(0, 0, width, height);
+
+        // --- REGULAR STARS ---
+        stars.forEach((star) => {
+            star.x += star.vx;
+            star.y += star.vy;
+
+            if (star.x < 0) star.x = width;
+            if (star.x > width) star.x = 0;
+            if (star.y < 0) star.y = height;
+            if (star.y > height) star.y = 0;
+
+            ctx.beginPath();
+            ctx.arc(star.x, star.y, star.size, 0, Math.PI * 2);
+            ctx.fillStyle = star.color;
+            ctx.globalAlpha = 0.8;
+            ctx.fill();
+
+            const dist = Math.hypot(star.x - mouse.x, star.y - mouse.y);
+            if (dist < 150) {
+                ctx.beginPath();
+                ctx.moveTo(star.x, star.y);
+                ctx.lineTo(mouse.x, mouse.y);
+                ctx.strokeStyle = star.color;
+                ctx.lineWidth = 0.6;
+                ctx.globalAlpha = 1 - dist / 150;
+                ctx.stroke();
+                ctx.globalAlpha = 1.0;
+            }
+        });
+
+        // --- SHOOTING STARS ---
+        // Randomly spawn (approx 1 every 2-3 seconds @ 60fps)
+        if (Math.random() < 0.001) {
+            spawnShootingStar();
+        }
+
+        shootingStars.forEach((star, index) => {
+            star.x += star.vx;
+            star.y += star.vy;
+            star.life--;
+
+            if (
+                star.life <= 0 ||
+                star.x < 0 ||
+                star.x > width ||
+                star.y > height
+            ) {
+                shootingStars.splice(index, 1);
+                return;
+            }
+
+            // Draw Tail
+            ctx.beginPath();
+            ctx.moveTo(star.x, star.y);
+            ctx.lineTo(star.x - star.vx * 3, star.y - star.vy * 3); // Short tail logic
+
+            // Gradient tail
+            const gradient = ctx.createLinearGradient(
+                star.x,
+                star.y,
+                star.x - star.vx * 3,
+                star.y - star.vy * 3,
+            );
+            gradient.addColorStop(0, "rgba(255, 255, 255, 1)");
+            gradient.addColorStop(1, "rgba(255, 255, 255, 0)");
+
+            ctx.strokeStyle = gradient;
+            ctx.lineWidth = 2;
+            ctx.stroke();
+        });
+
+        requestAnimationFrame(animate);
+    }
+
+    animate();
+
+    window.addEventListener("resize", () => {
+        width = canvas.width = window.innerWidth;
+        height = canvas.height = window.innerHeight;
+    });
+</script>

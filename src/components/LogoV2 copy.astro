@@ -1,0 +1,104 @@
+<a
+    href="/"
+    class="group relative block w-20 h-20 md:w-24 md:h-24 flex items-center justify-center cursor-pointer"
+>
+    <svg
+        viewBox="0 0 100 100"
+        fill="none"
+        xmlns="http://www.w3.org/2000/svg"
+        class="w-full h-full overflow-visible"
+    >
+        <defs>
+            <linearGradient
+                id="morph-grad"
+                x1="0"
+                y1="0"
+                x2="100"
+                y2="100"
+                gradientUnits="userSpaceOnUse"
+            >
+                <stop offset="0%" stop-color="#22d3ee"></stop>
+                <stop offset="50%" stop-color="#a78bfa"></stop>
+                <stop offset="100%" stop-color="#f472b6"></stop>
+            </linearGradient>
+
+            <filter
+                id="morph-glow"
+                x="-50%"
+                y="-50%"
+                width="200%"
+                height="200%"
+            >
+                <feGaussianBlur stdDeviation="3" result="coloredBlur"
+                ></feGaussianBlur>
+                <feMerge>
+                    <feMergeNode in="coloredBlur"></feMergeNode>
+                    <feMergeNode in="SourceGraphic"></feMergeNode>
+                </feMerge>
+            </filter>
+        </defs>
+
+        <path
+            id="left-bar"
+            d="M 28 32 L 28 68"
+            class="stroke-cyan-400 transition-all duration-700 cubic-bezier(0.4, 0, 0.2, 1)"
+            stroke-width="3"
+            stroke-linecap="round"></path>
+
+        <path
+            id="right-bar"
+            d="M 72 32 L 72 68"
+            class="stroke-purple-400 transition-all duration-700 cubic-bezier(0.4, 0, 0.2, 1)"
+            stroke-width="3"
+            stroke-linecap="round"></path>
+
+        <path
+            id="center-v"
+            d="M 42 42 L 50 58 L 58 42"
+            class="stroke-white transition-all duration-700 cubic-bezier(0.4, 0, 0.2, 1)"
+            stroke-width="3"
+            stroke-linecap="round"
+            stroke-linejoin="round"></path>
+    </svg>
+
+    <div
+        class="absolute -bottom-2 left-1/2 -translate-x-1/2 opacity-0 group-hover:opacity-100 transition-opacity duration-500 delay-200"
+    >
+        <span class="text-[10px] font-mono text-white/80 tracking-[0.2em]"
+            >VML</span
+        >
+    </div>
+</a>
+
+<style>
+    /* === HOVER ANIMATIONS (Scaled Down Version of Original) === */
+    /* Original was: y=20 to y=85.
+       New is: y=25 to y=75. (Keeps the shape, loses the height expansion)
+    */
+
+    /* 1. Left Bar -> Left Leg of V */
+    /* Scaled coordinates to preserve steep ratio */
+    .group:hover #left-bar {
+        d: path("M 22 50 L 50 75");
+        stroke: url(#morph-grad);
+        stroke-width: 3;
+        filter: url(#morph-glow);
+    }
+
+    /* 2. Right Bar -> Right Leg of V */
+    .group:hover #right-bar {
+        d: path("M 78 50 L 50 75");
+        stroke: url(#morph-grad);
+        stroke-width: 3;
+        filter: url(#morph-glow);
+    }
+
+    /* 3. Center V -> The Peak */
+    /* Fits perfectly inside the new V */
+    .group:hover #center-v {
+        d: path("M 32 44 L 50 29 L 68 44");
+        stroke: #22d3ee;
+        stroke-width: 2.5;
+        filter: drop-shadow(0 0 5px rgba(34, 211, 238, 0.8));
+    }
+</style>

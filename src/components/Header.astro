@@ -1,0 +1,42 @@
+---
+import Logo from "./Logo.astro";
+import LogoV2 from "./LogoV2.astro";
+
+const links = [
+    { name: "Home", href: "#top" },
+    { name: "About", href: "#about" },
+    { name: "Experience", href: "#experience" },
+];
+---
+
+<nav
+    class="fixed top-0 left-0 w-full z-50 backdrop-blur-md bg-black/20 border-b border-white/5"
+>
+    <div class="max-w-4xl mx-auto px-6 h-16 flex items-center justify-between">
+        <div class="hover:scale-110 transition-transform duration-300">
+            <LogoV2 />
+        </div>
+        <a
+            href="#"
+            class="font-mono text-xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-cyan-400 to-purple-500 hover:opacity-80 transition-opacity"
+        >
+            VML
+        </a>
+
+        <ul class="flex gap-6">
+            {
+                links.map((link) => (
+                    <li>
+                        <a
+                            href={link.href}
+                            class="text-sm font-mono text-gray-300 hover:text-white transition-colors relative group"
+                        >
+                            {link.name}
+                            <span class="absolute -bottom-1 left-0 w-0 h-[1px] bg-cyan-400 transition-all group-hover:w-full" />
+                        </a>
+                    </li>
+                ))
+            }
+        </ul>
+    </div>
+</nav>

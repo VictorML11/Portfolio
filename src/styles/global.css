@@ -1,0 +1,55 @@
+@import 'tailwindcss';
+@plugin "@midudev/tailwind-animations";
+
+@theme {
+    --font-sans: 'Inter', system-ui, sans-serif;
+    --font-mono: 'JetBrains Mono', monospace;
+
+    /* A richer, more vibrant palette */
+    --color-bg-deep: #020617;
+    /* Slate 950 */
+    --color-bg-light: #1e1b4b;
+    /* Indigo 950 */
+    --color-accent-cyan: #22d3ee;
+    --color-accent-purple: #c084fc;
+}
+
+html {
+    background-color: var(--color-bg-deep);
+    color: #e2e8f0;
+    scroll-behavior: smooth;
+}
+
+body {
+    /* Subtle mesh gradient to break the pure darkness */
+    background: radial-gradient(circle at 50% 0%, #1e1b4b 0%, #020617 80%);
+    min-height: 100vh;
+}
+
+/* THE DRAWING ANIMATION (Like the video) */
+.draw-path {
+    stroke-dasharray: 1000;
+    stroke-dashoffset: 1000;
+    animation: draw 4s ease-in-out forwards;
+}
+
+@keyframes draw {
+    to {
+        stroke-dashoffset: 0;
+    }
+}
+
+/* Photo Gradient Spin */
+@keyframes spin-slow {
+    from {
+        transform: rotate(0deg);
+    }
+
+    to {
+        transform: rotate(360deg);
+    }
+}
+
+.animate-spin-slow {
+    animation: spin-slow 10s linear infinite;
+}

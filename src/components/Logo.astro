@@ -1,0 +1,68 @@
+<a href="/" class="group relative block w-12 h-12 md:w-16 md:h-16">
+    <svg
+        viewBox="0 0 100 100"
+        fill="none"
+        xmlns="http://www.w3.org/2000/svg"
+        class="w-full h-full overflow-visible"
+    >
+        <defs>
+            <filter id="glow" x="-50%" y="-50%" width="200%" height="200%">
+                <feGaussianBlur stdDeviation="2" result="coloredBlur"
+                ></feGaussianBlur>
+                <feMerge>
+                    <feMergeNode in="coloredBlur"></feMergeNode>
+                    <feMergeNode in="SourceGraphic"></feMergeNode>
+                </feMerge>
+            </filter>
+        </defs>
+
+        <path
+            d="M20 20 L50 80"
+            class="draw-path stroke-white group-hover:stroke-cyan-400 transition-colors duration-500"
+            stroke-width="2"
+            stroke-linecap="round"></path>
+        <path
+            d="M80 20 L50 80"
+            class="draw-path stroke-white group-hover:stroke-purple-400 transition-colors duration-500"
+            style="animation-delay: 0.2s"
+            stroke-width="2"
+            stroke-linecap="round"></path>
+
+        <circle
+            cx="20"
+            cy="20"
+            r="4"
+            class="fill-bg-deep stroke-cyan-400 group-hover:fill-cyan-400 transition-colors duration-300"
+            stroke-width="2"></circle>
+        <circle
+            cx="80"
+            cy="20"
+            r="4"
+            class="fill-bg-deep stroke-purple-400 group-hover:fill-purple-400 transition-colors duration-300"
+            stroke-width="2"></circle>
+        <circle
+            cx="50"
+            cy="80"
+            r="5"
+            class="fill-white group-hover:fill-white animate-pulse"></circle>
+
+        <ellipse
+            cx="50"
+            cy="50"
+            rx="40"
+            ry="15"
+            transform="rotate(-15 50 50)"
+            class="draw-path stroke-gray-700 group-hover:stroke-cyan-500/50 transition-colors"
+            style="animation-delay: 0.8s"
+            stroke-width="1"
+            stroke-dasharray="2 4"></ellipse>
+    </svg>
+
+    <div
+        class="absolute -bottom-6 left-1/2 -translate-x-1/2 opacity-0 group-hover:opacity-100 transition-opacity duration-300 whitespace-nowrap"
+    >
+        <span class="text-[10px] font-mono tracking-widest text-cyan-300"
+            >VML</span
+        >
+    </div>
+</a>

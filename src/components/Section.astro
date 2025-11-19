@@ -1,0 +1,14 @@
+---
+const { id, title, className } = Astro.props;
+---
+
+<section id={id} class={`relative py-16 ${className}`}>
+    <div class="absolute left-0 top-8 w-8 h-[1px] bg-white/20 hidden md:block">
+    </div>
+    <h2
+        class="text-sm font-mono text-gray-400 mb-8 tracking-widest uppercase animate-fade-in"
+    >
+        {title}
+    </h2>
+    <slot />
+</section>
