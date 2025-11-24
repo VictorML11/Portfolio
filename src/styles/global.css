@@ -1,55 +1,65 @@
 @import 'tailwindcss';
 @plugin "@midudev/tailwind-animations";
 
+/* 1. Define the 'light' variant: applies when HTML has class="light" */
+@variant light (.light &);
+
 @theme {
     --font-sans: 'Inter', system-ui, sans-serif;
     --font-mono: 'JetBrains Mono', monospace;
 
-    /* A richer, more vibrant palette */
     --color-bg-deep: #020617;
-    /* Slate 950 */
     --color-bg-light: #1e1b4b;
-    /* Indigo 950 */
     --color-accent-cyan: #22d3ee;
     --color-accent-purple: #c084fc;
 }
 
+/* 2. Set Default (Dark) Variables */
+:root {
+    --bg-primary: #020617;
+    /* Slate 950 */
+    --bg-secondary: #1e1b4b;
+    --text-primary: #e2e8f0;
+    /* Slate 200 */
+    --text-muted: #94a3b8;
+    /* Slate 400 */
+    --glass-border: rgba(255, 255, 255, 0.1);
+    --glass-bg: rgba(255, 255, 255, 0.05);
+}
+
+.light {
+    /* Use a very clean, almost white slate for the background variables */
+    --bg-primary: #ffffff;
+    /* Pure White */
+    --bg-secondary: #f1f5f9;
+    /* Very light grey (Slate 100) */
+
+    /* Keep high contrast text */
+    --text-primary: #0f172a;
+    --text-muted: #475569;
+}
+
 html {
-    background-color: var(--color-bg-deep);
-    color: #e2e8f0;
+    background-color: var(--bg-primary);
+    /* Use var instead of hardcoded hex */
+    color: var(--text-primary);
     scroll-behavior: smooth;
+    transition: background-color 0.5s ease, color 0.5s ease;
 }
 
 body {
-    /* Subtle mesh gradient to break the pure darkness */
-    background: radial-gradient(circle at 50% 0%, #1e1b4b 0%, #020617 80%);
+    /* Default Dark Gradient (Keep this) */
+    background: radial-gradient(circle at 50% 0%, var(--bg-secondary) 0%, var(--bg-primary) 80%);
+}
+
+/* UPDATE THE LIGHT BODY GRADIENT */
+.light body {
+    /* Clean, subtle vertical fade. No strong blue. */
+    background: linear-gradient(to bottom, #f8fafc 0%, #ffffff 100%);
+}
+
+body {
+    /* Update gradient to use variables */
+    background: radial-gradient(circle at 50% 0%, var(--bg-secondary) 0%, var(--bg-primary) 80%);
     min-height: 100vh;
-}
-
-/* THE DRAWING ANIMATION (Like the video) */
-.draw-path {
-    stroke-dasharray: 1000;
-    stroke-dashoffset: 1000;
-    animation: draw 4s ease-in-out forwards;
-}
-
-@keyframes draw {
-    to {
-        stroke-dashoffset: 0;
-    }
-}
-
-/* Photo Gradient Spin */
-@keyframes spin-slow {
-    from {
-        transform: rotate(0deg);
-    }
-
-    to {
-        transform: rotate(360deg);
-    }
-}
-
-.animate-spin-slow {
-    animation: spin-slow 10s linear infinite;
 }

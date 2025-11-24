@@ -1,6 +1,7 @@
 ---
 import Logo from "./Logo.astro";
 import LogoV2 from "./LogoV2.astro";
+import ThemeToggle from "./ThemeToggle.astro"; // Import it
 
 const links = [
     { name: "Home", href: "#top" },
@@ -38,5 +39,9 @@ const links = [
                 ))
             }
         </ul>
+        <div class="flex items-center gap-6">
+            <ul class="flex gap-6"></ul>
+            <ThemeToggle />
+        </div>
     </div>
 </nav>

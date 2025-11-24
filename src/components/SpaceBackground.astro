@@ -9,7 +9,9 @@
     let width = (canvas.width = window.innerWidth);
     let height = (canvas.height = window.innerHeight);
 
-    const colors = ["#ffffff", "#22d3ee", "#c084fc", "#f472b6"];
+    // 1. Define distinct palettes
+    const darkPalette = ["#ffffff", "#22d3ee", "#c084fc", "#f472b6"]; // Bright neon stars
+    const lightPalette = ["#94a3b8", "#64748b", "#334155", "#0ea5e9"]; // Dark tech dots (Slate + Blue)
 
     // 1. REGULAR STARS
     const stars: {
@@ -32,6 +34,41 @@
         life: number;
         color: string;
     }
+
+    // 2. Function to get current palette based on HTML class
+    function getPalette() {
+        return document.documentElement.classList.contains("light")
+            ? lightPalette
+            : darkPalette;
+    }
+
+    // 3. Update the Init function
+    function initStars() {
+        stars.length = 0; // Clear old stars
+        const currentColors = getPalette(); // Get correct colors
+
+        for (let i = 0; i < numStars; i++) {
+            stars.push({
+                x: Math.random() * width,
+                y: Math.random() * height,
+                vx: (Math.random() - 0.5) * 0.2,
+                vy: (Math.random() - 0.5) * 0.2,
+                size: Math.random() * 2, // Keep them small
+                color: currentColors[
+                    Math.floor(Math.random() * currentColors.length)
+                ],
+            });
+        }
+    }
+
+    // 4. Add listener to re-draw when toggle is clicked
+    window.addEventListener("theme-change", () => {
+        initStars();
+    });
+
+    // Initial call
+    initStars();
+
     let shootingStars: ShootingStar[] = [];
 
     let mouse = { x: -100, y: -100 };
@@ -40,18 +77,6 @@
         mouse.x = e.clientX;
         mouse.y = e.clientY;
     });
-
-    // Init Regular Stars
-    for (let i = 0; i < numStars; i++) {
-        stars.push({
-            x: Math.random() * width,
-            y: Math.random() * height,
-            vx: (Math.random() - 0.5) * 0.2,
-            vy: (Math.random() - 0.5) * 0.2,
-            size: Math.random() * 2,
-            color: colors[Math.floor(Math.random() * colors.length)],
-        });
-    }
 
     function spawnShootingStar() {
         // Spawn mostly from top-left or top-right
